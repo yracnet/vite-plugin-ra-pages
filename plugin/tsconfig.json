@@ -1,7 +1,43 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2020",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "allowJs": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noUnusedParameters": true,
+    "baseUrl": ".",
+    "paths": {
+      "@api/configure": [
+        "src/api-server/configure.ts"
+      ],
+      "@api/handler": [
+        "src/api-server/handler.ts"
+      ],
+      "@api/routers": [
+        "src/api-server/routers.ts"
+      ],
+      "@api/server": [
+        "src/api-server/server.ts"
+      ],
+    }
+  },
+  "include": [
+    "src/**/*",
+    "src/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "example",
+    "dist",
+    ".api"
   ]
 }
