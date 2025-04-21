@@ -3,7 +3,7 @@ import path from "path";
 import { appendELAttr, printElement, printImports, RRElement } from "./el";
 import { ConfigEntry, parseRoutePath, slashPath } from "./scan";
 
-export const generateRAAdmin = (file: string, config: ConfigEntry) => {
+export const writeRAAdmin = (file: string, config: ConfigEntry) => {
   const dirout = path.dirname(file);
   const wrappers: string[] = [];
 

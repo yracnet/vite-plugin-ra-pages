@@ -2,8 +2,10 @@ import { GlobOptionsWithFileTypesUnset, globSync } from "glob";
 import path from "path";
 
 export const slashPath = (name: string) => name.replace(/\\/g, "/");
+
 export const removeSufix = (name: string) =>
   name.replace(/\/(Index|Page)\.(jsx|tsx)$/, "");
+
 export const parseRoutePath = (name: string) =>
   name
     .replace(/\/(Index|Page)\.(jsx|tsx)$/, "")

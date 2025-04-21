@@ -1,10 +1,7 @@
 {
-  "name": "vite-plugin-ra-pages",
+  "name": "ra-pages",
   "version": "1.0.0",
   "author": "Willyams Yujra <yracnet@gmail.com>",
   "license": "MIT",
-  "private":true,
-  "workspaces":[
-    "plugin"
-  ]
+  "private": true
 }
