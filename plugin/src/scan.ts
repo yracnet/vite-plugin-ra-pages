@@ -3,6 +3,15 @@ import path from "path";
 
 export const slashPath = (name: string) => name.replace(/\\/g, "/");
 
+export const resolveImportFile = (pathFile: string[], root: string) => {
+  let importFile = path.relative(root, path.join(...pathFile));
+  importFile = slashPath(importFile);
+  if (!importFile.startsWith(".")) {
+    importFile = `./${importFile}`;
+  }
+  return importFile;
+};
+
 export const removeSufix = (name: string) =>
   name.replace(/\/(Index|Page)\.(jsx|tsx)$/, "");
 
@@ -92,6 +101,7 @@ export type ConfigEntry = {
   resources: RouteResource[];
   others: RouteFile[];
 };
+
 export const getConfigEntries = (root: string): ConfigEntry => {
   const { resources, others } = getEntries(root);
   const routeResources = resources.map((resource, ix) => {

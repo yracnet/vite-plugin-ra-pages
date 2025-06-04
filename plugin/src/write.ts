@@ -1,9 +1,14 @@
 import fs from "fs";
 import path from "path";
 import { appendELAttr, printElement, printImports, RRElement } from "./el";
-import { ConfigEntry, parseRoutePath, slashPath } from "./scan";
+import { RAConfig } from "./main";
+import { ConfigEntry, parseRoutePath, resolveImportFile } from "./scan";
 
-export const writeRAAdmin = (file: string, config: ConfigEntry) => {
+export const writeRAAdmin = (
+  file: string,
+  config: ConfigEntry,
+  raConfig: RAConfig
+) => {
   const dirout = path.dirname(file);
   const wrappers: string[] = [];
 
@@ -23,6 +28,7 @@ export const writeRAAdmin = (file: string, config: ConfigEntry) => {
     },
     children: [],
     imports: [
+      "import React from 'react';",
       "import { Admin, Resource } from 'react-admin';",
       "import { Route } from 'react-router-dom';",
     ],
@@ -41,11 +47,14 @@ export const writeRAAdmin = (file: string, config: ConfigEntry) => {
         attrs: {},
         children: [],
         imports: Object.entries(keyImport).map(([file, key]) => {
-          const importFile = path.relative(
-            dirout,
-            path.join(rr.root, rr.resource, file)
+          const importFile = resolveImportFile(
+            [rr.root, rr.resource, file],
+            dirout
           );
-          return `import * as ${key} from '${slashPath(importFile)}';`;
+          if (raConfig.lazyLoad) {
+            return `const ${key} = { default: React.lazy(() => import('${importFile}')) };`;
+          }
+          return `import * as ${key} from '${importFile}';`;
         }),
       };
       appendELAttr(
@@ -104,8 +113,14 @@ export const writeRAAdmin = (file: string, config: ConfigEntry) => {
     });
 
   config.others.forEach((rf) => {
-    const importFile = path.relative(dirout, path.join(rf.root, rf.file));
-    root.imports.push(`import * as ${rf.key} from '${slashPath(importFile)}';`);
+    const importFile = resolveImportFile([rf.root, rf.file], dirout);
+    if (raConfig.lazyLoad) {
+      return `const ${rf.key} = { default: React.lazy(() => import('${importFile}')) };`;
+    } else {
+      root.imports.push(`import * as ${rf.key} from '${importFile}';`);
+    }
+    //root.imports.push(`import * as ${rf.key} from '${slashPath(importFile)}';`);
+
     if (rf.file.startsWith("Page.")) {
       //Add Dashboard
       root.attrs = {

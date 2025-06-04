@@ -34,11 +34,11 @@ export const appendELAttr = (
 export const printImports = (root: RRElement) => {
   const collected: string[] = [];
   const walk = (node: RRElement) => {
-    node.imports.forEach((imp) => collected.push(imp));
+    node.imports.filter((it) => it).forEach((imp) => collected.push(imp));
     node.children.forEach((child) => walk(child));
   };
   walk(root);
-  return collected.sort().join("\n");
+  return collected.join("\n");
 };
 
 export const printElement = (el: RRElement, tab: string = "  "): string => {

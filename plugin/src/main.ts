@@ -3,26 +3,44 @@ import { PluginOption } from "vite";
 import { getConfigEntries } from "./scan";
 import { writeRAAdmin } from "./write";
 
-export type RAOpts = {
-  root?: string;
-  pageDir?: string;
-  cacheDir?: string;
-  aliasPage?: string;
+export type RAConfig = {
+  root: string;
+  pageDir: string;
+  cacheDir: string;
+  aliasPage: string;
+  lazyLoad: boolean;
 };
+export type RAOpts = Partial<RAConfig>;
 
-export const raPages = ({
+const ensureRAConfig = ({
   root = process.cwd(),
   pageDir = "src/pages",
   cacheDir = ".ra",
   aliasPage = "ra-pages.jsx",
-}: RAOpts = {}): PluginOption => {
-  const rootPageDir = path.resolve(root, pageDir);
-  const mainPageFile = path.resolve(root, cacheDir, aliasPage);
+  lazyLoad = false,
+}: RAOpts): RAConfig => {
+  return {
+    root,
+    pageDir,
+    cacheDir,
+    aliasPage,
+    lazyLoad,
+  };
+};
+
+export const raPages = (raOpts: RAOpts = {}): PluginOption => {
+  const raConfig = ensureRAConfig(raOpts);
+  const rootPageDir = path.resolve(raConfig.root, raConfig.pageDir);
+  const mainPageFile = path.resolve(
+    raConfig.root,
+    raConfig.cacheDir,
+    raConfig.aliasPage
+  );
   const shouldRegenerate = (file: string) => file.startsWith(rootPageDir);
 
   const regenerate = () => {
     const config = getConfigEntries(rootPageDir);
-    writeRAAdmin(mainPageFile, config);
+    writeRAAdmin(mainPageFile, config, raConfig);
   };
 
   regenerate();
@@ -35,7 +53,7 @@ export const raPages = ({
       return {
         resolve: {
           alias: {
-            [aliasPage]: mainPageFile,
+            [raConfig.aliasPage]: mainPageFile,
           },
         },
       };
