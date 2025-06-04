@@ -115,12 +115,12 @@ export const writeRAAdmin = (
   config.others.forEach((rf) => {
     const importFile = resolveImportFile([rf.root, rf.file], dirout);
     if (raConfig.lazyLoad) {
-      return `const ${rf.key} = { default: React.lazy(() => import('${importFile}')) };`;
+      root.imports.push(
+        `const ${rf.key} = { default: React.lazy(() => import('${importFile}')) };`
+      );
     } else {
       root.imports.push(`import * as ${rf.key} from '${importFile}';`);
     }
-    //root.imports.push(`import * as ${rf.key} from '${slashPath(importFile)}';`);
-
     if (rf.file.startsWith("Page.")) {
       //Add Dashboard
       root.attrs = {
