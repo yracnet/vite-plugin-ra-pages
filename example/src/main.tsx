@@ -1,9 +1,7 @@
 import jsonServerProvider from "ra-data-json-server";
-import RAAdmin from "ra-pages.jsx";
+import RAAdmin from "ra-main.jsx";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-//import RAAdmin from "../node_modules/.ra/ra-pages.jsx";
-//import RAAdmin from "./ra-pages.jsx";
 
 const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
 

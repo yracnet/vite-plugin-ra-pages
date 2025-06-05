@@ -34,7 +34,9 @@ export default defineConfig({
       // root: process.cwd(),
       // pageDir: "src/pages",
       // cacheDir: ".ra",
-      // aliasPage: "ra-pages.jsx",
+      // raMain: "ra-main.jsx",
+      // raMenu: "ra-menu.jsx",
+      // lazyLoad: false,
     }),
   ],
 });

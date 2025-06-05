@@ -4,7 +4,7 @@ import { appendELAttr, printElement, printImports, RRElement } from "./el";
 import { RAConfig } from "./main";
 import { ConfigEntry, parseRoutePath, resolveImportFile } from "./scan";
 
-export const writeRAAdmin = (
+export const writeRAMain = (
   file: string,
   config: ConfigEntry,
   raConfig: RAConfig
