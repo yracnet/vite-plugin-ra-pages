@@ -8,3 +8,5 @@ export const Icon = AccountBox;
 export const Options = {
   label: "User Index",
 };
+
+export const Roles = [];

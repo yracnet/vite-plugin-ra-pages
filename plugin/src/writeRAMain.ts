@@ -29,7 +29,7 @@ export const writeRAMain = (
     children: [],
     imports: [
       "import React from 'react';",
-      "import { Admin, Resource } from 'react-admin';",
+      "import { Admin, Resource, usePermissions } from 'react-admin';",
       "import { Route } from 'react-router-dom';",
     ],
   };
@@ -43,7 +43,7 @@ export const writeRAMain = (
         return acc;
       }, {});
       const el: RRElement = {
-        tag: "Resource",
+        tag: "ResourceRole",
         attrs: {},
         children: [],
         imports: Object.entries(keyImport).map(([file, key]) => {
@@ -64,6 +64,7 @@ export const writeRAMain = (
           name: `'${rr.resource}'`,
           icon: "Icon",
           options: "Options",
+          roles: "Roles",
           list: nameWrap,
         },
         addWrap
@@ -145,6 +146,15 @@ export const writeRAMain = (
 ${printImports(root)}
 
 ${wrappers.join("\n")}
+
+
+const ResourceRole = ({ roles = [], ...props }) => {
+  const { permissions, isLoading } = usePermissions();
+  if (isLoading) return null;
+  const hasPermission = roles.length !== 0 || roles.some((role) => permissions.includes(role));
+  if (!hasPermission) return null;
+  return <Resource {...props} />;
+};
 
 const RAAdmin = (props)=>{
   return (
