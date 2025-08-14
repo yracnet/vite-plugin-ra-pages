@@ -51,6 +51,9 @@ export const writeRAAdmin = (
             [rr.root, rr.resource, file],
             dirout
           );
+          if (file.includes("Index.")) {
+            return `import * as ${key} from '${importFile}';`;
+          }
           if (raConfig.lazyLoad) {
             return `const ${key} = { default: React.lazy(() => import('${importFile}')) };`;
           }
