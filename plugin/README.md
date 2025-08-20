@@ -52,6 +52,8 @@ The plugin interprets the folder structure like this:
 ```
 src/pages/
 │   Page.jsx            // Dashboard
+├───dashboard           // or
+│   │   Page.jsx        // Dashboard
 ├───posts
 │   │   Index.jsx       // Resource posts
 │   ├───create/Page.jsx

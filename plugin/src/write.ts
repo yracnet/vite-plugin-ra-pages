@@ -124,7 +124,7 @@ export const writeRAAdmin = (
     } else {
       root.imports.push(`import * as ${rf.key} from '${importFile}';`);
     }
-    if (rf.file.startsWith("Page.")) {
+    if (rf.file.startsWith("Page.") || rf.file.startsWith("dashboard/Page.")) {
       //Add Dashboard
       root.attrs = {
         dashboard: `${rf.key}.default`,
