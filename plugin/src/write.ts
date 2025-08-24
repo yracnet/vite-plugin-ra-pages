@@ -29,7 +29,7 @@ export const writeRAAdmin = (
     children: [],
     imports: [
       "import React from 'react';",
-      "import { Admin, Resource } from 'react-admin';",
+      "import { Admin, CustomRoutes, Resource } from 'react-admin';",
       "import { Route } from 'react-router-dom';",
     ],
   };
@@ -115,6 +115,14 @@ export const writeRAAdmin = (
       root.children.push(it);
     });
 
+  const customRoutes: RRElement = {
+    tag: "CustomRoutes",
+    attrs: {},
+    children: [],
+    imports: [],
+  };
+  root.children.push(customRoutes);
+
   config.others.forEach((rf) => {
     const importFile = resolveImportFile([rf.root, rf.file], dirout);
     if (raConfig.lazyLoad) {
@@ -140,7 +148,7 @@ export const writeRAAdmin = (
         children: [],
         imports: [],
       };
-      root.children.push(child);
+      customRoutes.children.push(child);
     }
   });
 
