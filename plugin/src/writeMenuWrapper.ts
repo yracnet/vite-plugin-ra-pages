@@ -4,7 +4,7 @@ import { appendELAttr, printElement, printImports, type RRElement } from "./el";
 import type { RAConfig } from "./types";
 import { type ConfigEntry, parseRoutePath, resolveImportFile } from "./scan";
 
-export const writeAdminWrapper = (
+export const writeMenuWrapper = (
   file: string,
   config: ConfigEntry,
   raConfig: RAConfig
@@ -44,7 +44,7 @@ export const writeAdminWrapper = (
         return acc;
       }, {});
       const el: RRElement = {
-        tag: raConfig.withRole ? "ResourceRole" : "Resource",
+        tag: "Resource",
         attrs: {},
         children: [],
         imports: Object.entries(keyImport).map(([file, key]) => {
@@ -52,9 +52,6 @@ export const writeAdminWrapper = (
             [rr.root, rr.resource, file],
             dirout
           );
-          if (file.includes("Index.")) {
-            return `import * as ${key} from '${importFile}';`;
-          }
           if (raConfig.lazyLoad) {
             return `const ${key} = { default: React.lazy(() => import('${importFile}')) };`;
           }
@@ -68,7 +65,6 @@ export const writeAdminWrapper = (
           name: `'${rr.resource}'`,
           icon: "Icon",
           options: "Options",
-          roles: "Roles",
           list: nameWrap,
         },
         addWrap
@@ -117,14 +113,6 @@ export const writeAdminWrapper = (
       root.children.push(it);
     });
 
-  const customRoutes: RRElement = {
-    tag: "CustomRoutes",
-    attrs: {},
-    children: [],
-    imports: [],
-  };
-  root.children.push(customRoutes);
-
   config.others.forEach((rf) => {
     const importFile = resolveImportFile([rf.root, rf.file], dirout);
     if (raConfig.lazyLoad) {
@@ -134,7 +122,7 @@ export const writeAdminWrapper = (
     } else {
       root.imports.push(`import * as ${rf.key} from '${importFile}';`);
     }
-    if (rf.file.startsWith("Page.") || rf.file.startsWith("dashboard/Page.")) {
+    if (rf.file.startsWith("Page.")) {
       //Add Dashboard
       root.attrs = {
         dashboard: `${rf.key}.default`,
@@ -150,7 +138,7 @@ export const writeAdminWrapper = (
         children: [],
         imports: [],
       };
-      customRoutes.children.push(child);
+      root.children.push(child);
     }
   });
 
@@ -158,37 +146,6 @@ export const writeAdminWrapper = (
 ${printImports(root)}
 
 ${wrappers.join("\n")}
-
-const ResourceRole = ({ roles = [], ...props }) => {
-  const { permissions, isLoading } = usePermissions();
-  if (isLoading) return null;
-  const hasPermission = roles.length !== 0 || roles.some((role) => permissions.includes(role));
-  if (!hasPermission) return null;
-  return <Resource {...props} />;
-};
-ResourceRole.raName = 'Resource';
-ResourceRole.registerResource = ({
-    create,
-    edit,
-    icon,
-    list,
-    name,
-    options,
-    show,
-    recordRepresentation,
-    hasCreate,
-    hasEdit,
-    hasShow,
-}) => ({
-    name,
-    options,
-    hasList: !!list,
-    hasCreate: !!create || !!hasCreate,
-    hasEdit: !!edit || !!hasEdit,
-    hasShow: !!show || !!hasShow,
-    icon,
-    recordRepresentation,
-});
 
 const RAAdmin = (props)=>{
   return (
