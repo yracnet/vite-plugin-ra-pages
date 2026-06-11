@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
 import { appendELAttr, printElement, printImports, RRElement } from "./el";
-import { RAConfig } from "./main";
+import { RAConfig } from "./types";
 import { ConfigEntry, parseRoutePath, resolveImportFile } from "./scan";
 
-export const writeRAAdmin = (
+export const writeAdminWrapper = (
   file: string,
   config: ConfigEntry,
   raConfig: RAConfig

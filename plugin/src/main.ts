@@ -1,32 +1,8 @@
 import path from "path";
 import { PluginOption } from "vite";
 import { getConfigEntries } from "./scan";
-import { writeRAAdmin } from "./write";
-
-export type RAConfig = {
-  root: string;
-  pageDir: string;
-  cacheDir: string;
-  aliasPage: string;
-  lazyLoad: boolean;
-};
-export type RAOpts = Partial<RAConfig>;
-
-const ensureRAConfig = ({
-  root = process.cwd(),
-  pageDir = "src/pages",
-  cacheDir = ".ra",
-  aliasPage = "ra-pages.jsx",
-  lazyLoad = false,
-}: RAOpts): RAConfig => {
-  return {
-    root,
-    pageDir,
-    cacheDir,
-    aliasPage,
-    lazyLoad,
-  };
-};
+import { writeAdminWrapper } from "./writeAdminWrapper";
+import { ensureRAConfig, RAOpts } from "./types";
 
 export const raPages = (raOpts: RAOpts = {}): PluginOption => {
   const raConfig = ensureRAConfig(raOpts);
@@ -40,7 +16,7 @@ export const raPages = (raOpts: RAOpts = {}): PluginOption => {
 
   const regenerate = () => {
     const config = getConfigEntries(rootPageDir);
-    writeRAAdmin(mainPageFile, config, raConfig);
+    writeAdminWrapper(mainPageFile, config, raConfig);
   };
 
   regenerate();
