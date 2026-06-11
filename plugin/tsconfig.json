@@ -16,18 +16,6 @@
     "noUnusedParameters": true,
     "baseUrl": ".",
     "paths": {
-      "@api/configure": [
-        "src/api-server/configure.ts"
-      ],
-      "@api/handler": [
-        "src/api-server/handler.ts"
-      ],
-      "@api/routers": [
-        "src/api-server/routers.ts"
-      ],
-      "@api/server": [
-        "src/api-server/server.ts"
-      ],
     }
   },
   "include": [

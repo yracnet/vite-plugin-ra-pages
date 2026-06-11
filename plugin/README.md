@@ -34,8 +34,11 @@ export default defineConfig({
       // root: process.cwd(),
       // pageDir: "src/pages",
       // cacheDir: ".ra",
-      // raMain: "ra-main.jsx",
-      // raMenu: "ra-menu.jsx",
+      // raAdminId: "ra-admin.jsx",
+      // raAdminFile: "ra-admin.jsx"
+      // raMenuId: "ra-menu.jsx",,
+      // raMenuFile: "ra-menu.jsx",
+      // raPkg = 'react-admin', or change to "@/components/admin"
       // lazyLoad: false,
     }),
   ],

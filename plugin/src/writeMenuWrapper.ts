@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
-import { appendELAttr, printElement, printImports, RRElement } from "./el";
-import { RAConfig } from "./main";
-import { ConfigEntry, parseRoutePath, resolveImportFile } from "./scan";
+import { appendELAttr, printElement, printImports, type RRElement } from "./el";
+import type { RAConfig } from "./types";
+import { type ConfigEntry, parseRoutePath, resolveImportFile } from "./scan";
 
-export const writeRAMenu = (
+export const writeMenuWrapper = (
   file: string,
   config: ConfigEntry,
   raConfig: RAConfig
@@ -29,7 +29,8 @@ export const writeRAMenu = (
     children: [],
     imports: [
       "import React from 'react';",
-      "import { Admin, Resource } from 'react-admin';",
+      "import { Resource, usePermissions } from 'ra-core';",
+      `import { Admin } from '${raConfig.raPkg}';`,
       "import { Route } from 'react-router-dom';",
     ],
   };

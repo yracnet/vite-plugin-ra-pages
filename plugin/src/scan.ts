@@ -1,4 +1,4 @@
-import { GlobOptionsWithFileTypesUnset, globSync } from "glob";
+import { type GlobOptionsWithFileTypesUnset, globSync } from "glob";
 import path from "path";
 
 export const slashPath = (name: string) => name.replace(/\\/g, "/");

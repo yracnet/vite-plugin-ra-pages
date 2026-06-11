@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
-import { appendELAttr, printElement, printImports, RRElement } from "./el";
-import { RAConfig } from "./main";
-import { ConfigEntry, parseRoutePath, resolveImportFile } from "./scan";
+import { appendELAttr, printElement, printImports, type RRElement } from "./el";
+import type { RAConfig } from "./types";
+import { type ConfigEntry, parseRoutePath, resolveImportFile } from "./scan";
 
-export const writeRAMain = (
+export const writeAdminWrapper = (
   file: string,
   config: ConfigEntry,
   raConfig: RAConfig
@@ -29,10 +29,14 @@ export const writeRAMain = (
     children: [],
     imports: [
       "import React from 'react';",
-      "import { Admin, Resource, usePermissions } from 'react-admin';",
+      "import { Resource, usePermissions } from 'ra-core';",
+      `import { Admin } from '${raConfig.raPkg}';`,
       "import { Route } from 'react-router-dom';",
     ],
   };
+  // if (raConfig.asTsx) {
+  //   root.imports.push("import type { CoreAdminContextProps, ResourceProps} from 'ra-core';");
+  // }
   config.resources
     .map((rr) => {
       const files = [rr.list, rr.create, rr.show, rr.edit, ...rr.others].filter(
@@ -43,7 +47,7 @@ export const writeRAMain = (
         return acc;
       }, {});
       const el: RRElement = {
-        tag: "ResourceRole",
+        tag: raConfig.withRole ? "ResourceRole" : "Resource",
         attrs: {},
         children: [],
         imports: Object.entries(keyImport).map(([file, key]) => {
@@ -147,7 +151,6 @@ ${printImports(root)}
 
 ${wrappers.join("\n")}
 
-
 const ResourceRole = ({ roles = [], ...props }) => {
   const { permissions, isLoading } = usePermissions();
   if (isLoading) return null;
@@ -155,6 +158,29 @@ const ResourceRole = ({ roles = [], ...props }) => {
   if (!hasPermission) return null;
   return <Resource {...props} />;
 };
+ResourceRole.raName = 'Resource';
+ResourceRole.registerResource = ({
+    create,
+    edit,
+    icon,
+    list,
+    name,
+    options,
+    show,
+    recordRepresentation,
+    hasCreate,
+    hasEdit,
+    hasShow,
+}) => ({
+    name,
+    options,
+    hasList: !!list,
+    hasCreate: !!create || !!hasCreate,
+    hasEdit: !!edit || !!hasEdit,
+    hasShow: !!show || !!hasShow,
+    icon,
+    recordRepresentation,
+});
 
 const RAAdmin = (props)=>{
   return (

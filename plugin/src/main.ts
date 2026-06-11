@@ -1,56 +1,29 @@
 import path from "path";
-import { PluginOption } from "vite";
+import { type PluginOption } from "vite";
 import { getConfigEntries } from "./scan";
-import { writeRAMain } from "./writeRAMain";
-import { writeRAMenu } from "./writeRAMenu";
-
-export type RAConfig = {
-  root: string;
-  pageDir: string;
-  cacheDir: string;
-  raMain: string;
-  raMenu: string;
-  lazyLoad: boolean;
-};
-export type RAOpts = Partial<RAConfig>;
-
-const ensureRAConfig = ({
-  root = process.cwd(),
-  pageDir = "src/pages",
-  cacheDir = ".ra",
-  raMain = "ra-main.jsx",
-  raMenu = "ra-menu.jsx",
-  lazyLoad = false,
-}: RAOpts): RAConfig => {
-  return {
-    root,
-    pageDir,
-    cacheDir,
-    raMain,
-    raMenu,
-    lazyLoad,
-  };
-};
+import { writeAdminWrapper } from "./writeAdminWrapper";
+import { writeMenuWrapper } from "./writeMenuWrapper";
+import { ensureRAConfig, type RAOpts } from "./types";
 
 export const raPages = (raOpts: RAOpts = {}): PluginOption => {
   const raConfig = ensureRAConfig(raOpts);
   const rootPageDir = path.resolve(raConfig.root, raConfig.pageDir);
-  const raMainFile = path.resolve(
+  const raAdminFileFile = path.resolve(
     raConfig.root,
     raConfig.cacheDir,
-    raConfig.raMain
+    raConfig.raAdminFile
   );
-  const raMenuFile = path.resolve(
+  const raMenuFileFile = path.resolve(
     raConfig.root,
     raConfig.cacheDir,
-    raConfig.raMenu
+    raConfig.raMenuFile
   );
   const shouldRegenerate = (file: string) => file.startsWith(rootPageDir);
 
   const regenerate = () => {
     const config = getConfigEntries(rootPageDir);
-    writeRAMain(raMainFile, config, raConfig);
-    writeRAMenu(raMenuFile, config, raConfig);
+    writeAdminWrapper(raAdminFileFile, config, raConfig);
+    writeMenuWrapper(raMenuFileFile, config, raConfig);
   };
 
   regenerate();
@@ -61,7 +34,8 @@ export const raPages = (raOpts: RAOpts = {}): PluginOption => {
       return {
         resolve: {
           alias: {
-            [raConfig.raMain]: raMainFile,
+            [raConfig.raAdminId]: raAdminFileFile,
+            [raConfig.raMenuId]: raMenuFileFile,
           },
         },
       };
