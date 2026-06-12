@@ -29,7 +29,7 @@ export const writeAdminWrapper = (
     children: [],
     imports: [
       "import React from 'react';",
-      "import { Resource, usePermissions } from 'ra-core';",
+      "import { CustomRoutes, Resource, usePermissions } from 'ra-core';",
       `import { Admin } from '${raConfig.raPkg}';`,
       "import { Route } from 'react-router-dom';",
     ],
