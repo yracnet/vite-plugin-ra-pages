@@ -2,7 +2,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig([
   {
-    entry: ["src/main.ts"],
+    entry: ["src/index.ts"],
     format: ["esm"],
     outDir: "dist",
     external: ["vite", "rollup", "esbuild"],

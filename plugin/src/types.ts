@@ -32,29 +32,31 @@
 //     "INDEX"      : { role: "INDEX",  lazy: false, wrap: true, menu: true  },
 //     "PAGE"           : { role: "PAGE",   lazy: false, wrap: true, menu: false },
 // };
-
+type ModeScan = "legacy" | "v2";
 export type RAConfig = {
-    root:      string;
-    raAdminId:    string;
-    raMenuId:    string;
-    pageDir:   string;
-    cacheDir:  string;
-    raAdminFile:    string;
-    raMenuFile:    string;
-    raPkg:     string;
-    lazyLoad:  boolean;
+    root: string;
+    raAdminId: string;
+    raMenuId: string;
+    pageDir: string;
+    cacheDir: string;
+    raAdminFile: string;
+    raMenuFile: string;
+    raPkg: string;
+    mode: ModeScan;
+    lazyLoad: boolean;
     withRole: boolean;
     // roleMapping: Record<string, RoleMeta>
 };
 export type RAOpts = {
-    root?:     string;
-    pageDir?:  string;
+    root?: string;
+    pageDir?: string;
     cacheDir?: string;
-    raAdminId?:   string;
-    raAdminFile?:   string;
-    raMenuId?:   string;
-    raMenuFile?:   string;
-    raPkg?:    string;
+    raAdminId?: string;
+    raAdminFile?: string;
+    raMenuId?: string;
+    raMenuFile?: string;
+    raPkg?: string;
+    mode?: ModeScan;
     lazyLoad?: boolean;
     withRole?: boolean;
     // roleMapping: Record<string, RoleMeta|false>
@@ -69,6 +71,7 @@ export const ensureRAConfig = ({
     raMenuId = "ra-menu.jsx",
     raMenuFile = "ra-menu.jsx",
     raPkg = 'react-admin',
+    mode = "legacy",
     lazyLoad = false,
     withRole = false,
     //roleMapping = {},
@@ -82,8 +85,9 @@ export const ensureRAConfig = ({
         raAdminFile,
         raMenuFile,
         raPkg,
-        //roleMapping: { ...DEFAULT_ROLE_MAPPING, ...roleMapping },
+        mode,
         lazyLoad,
         withRole,
+        //roleMapping: { ...DEFAULT_ROLE_MAPPING, ...roleMapping },
     };
 };

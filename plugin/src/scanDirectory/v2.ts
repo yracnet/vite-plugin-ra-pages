@@ -1,25 +1,11 @@
 import { type GlobOptionsWithFileTypesUnset, globSync } from "glob";
-import path, {slash} from "slash-path";
+import path, { slash } from "slash-path";
+import { ConfigEntry, RouteResource } from "./types";
 
-
-export const resolveImportFile = (pathFile: string[], root: string) => {
-  let importFile = path.relative(root, path.join(...pathFile));
-  if (!importFile.startsWith(".")) {
-    importFile = `./${importFile}`;
-  }
-  return importFile;
-};
-
-export const removeSufix = (name: string) =>
+const removeSufix = (name: string) =>
   name.replace(/\/(LIST|INDEX|PAGE)\.(jsx|tsx)$/, "");
 
-export const parseRoutePath = (name: string) =>
-  name
-    .replace(/\/(LIST|INDEX|PAGE)\.(jsx|tsx)$/, "")
-    .replace("[", ":")
-    .replace("]", "");
-
-export const globSlash = (
+const globSlash = (
   pattern: string,
   options: GlobOptionsWithFileTypesUnset
 ) => {
@@ -27,7 +13,7 @@ export const globSlash = (
   return files.map((path) => slash(path));
 };
 
-export const getEntries = (root: string) => {
+const getEntries = (root: string) => {
   const options = {
     cwd: root,
     ignore: "node_modules/**",
@@ -42,30 +28,15 @@ export const getEntries = (root: string) => {
   };
 };
 
-export type Config = {
+type Config = {
   key: string;
   root: string;
   resource: string;
 };
 
-export type RouteResource = {
-  key: string;
-  root: string;
-  resource: string;
-  list: any;
-  create?: any;
-  edit?: any;
-  show?: any;
-  others: any[];
-};
 
-export type RouteFile = {
-  key: string;
-  root: string;
-  file: string;
-};
 
-export const getRouteResource = ({
+const getRouteResource = ({
   resource,
   root,
   key,
@@ -75,7 +46,7 @@ export const getRouteResource = ({
     ignore: "node_modules/**",
     nodir: true,
   });
-  console.log(">>>>",files);
+  console.log(">>>>", files);
   const list = files.find((it) => it.startsWith("LIST."))!;
   const create = files.find((it) => it.startsWith("create/PAGE."));
   const withParam = files.filter((it) => it.startsWith("[id]/"));
@@ -96,12 +67,7 @@ export const getRouteResource = ({
   };
 };
 
-export type ConfigEntry = {
-  resources: RouteResource[];
-  others: RouteFile[];
-};
-
-export const getConfigEntries = (root: string): ConfigEntry => {
+const getConfigEntries = (root: string): ConfigEntry => {
   const { resources, others } = getEntries(root);
   console.log(resources, others);
   const routeResources = resources.map((resource, ix) => {
@@ -124,3 +90,6 @@ export const getConfigEntries = (root: string): ConfigEntry => {
     others: routeFiles,
   };
 };
+
+
+export default getConfigEntries;

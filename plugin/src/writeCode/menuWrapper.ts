@@ -1,8 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { appendELAttr, printElement, printImports, type RRElement } from "./el";
-import type { RAConfig } from "./types";
-import { type ConfigEntry, parseRoutePath, resolveImportFile } from "./scanDirectory";
+import type { RAConfig } from "../types";
+import { parseRoutePath, resolveImportFile } from "../scanDirectory";
+import type { ConfigEntry } from "../scanDirectory/types";
 
 export const writeMenuWrapper = (
   file: string,

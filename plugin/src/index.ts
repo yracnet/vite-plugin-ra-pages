@@ -1,8 +1,8 @@
 import path from "path";
 import { type PluginOption } from "vite";
-import { getConfigEntries } from "./scanDirectory2";
-import { writeAdminWrapper } from "./writeAdminWrapper";
-import { writeMenuWrapper } from "./writeMenuWrapper";
+import { getConfigEntries } from "./scanDirectory";
+import { writeAdminWrapper } from "./writeCode/adminWrapper";
+import { writeMenuWrapper } from "./writeCode/menuWrapper";
 import { ensureRAConfig, type RAOpts } from "./types";
 
 export const raPages = (raOpts: RAOpts = {}): PluginOption => {
@@ -21,7 +21,7 @@ export const raPages = (raOpts: RAOpts = {}): PluginOption => {
   const shouldRegenerate = (file: string) => file.startsWith(rootPageDir);
 
   const regenerate = () => {
-    const config = getConfigEntries(rootPageDir);
+    const config = getConfigEntries(rootPageDir, raConfig);
     writeAdminWrapper(raAdminFileFile, config, raConfig);
     writeMenuWrapper(raMenuFileFile, config, raConfig);
   };
