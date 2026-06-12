@@ -38,7 +38,8 @@
     "prepack": "yarn build"
   },
   "dependencies": {
-    "glob": "^11.0.1"
+    "glob": "^11.0.1",
+    "slash-path": "^0.0.2"
   },
   "peerDependencies": {
     "vite": "^2 || ^3 || ^4 || ^5 || ^6"

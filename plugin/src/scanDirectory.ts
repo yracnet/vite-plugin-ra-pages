@@ -1,11 +1,9 @@
 import { type GlobOptionsWithFileTypesUnset, globSync } from "glob";
-import path from "path";
+import path, {slash} from "slash-path";
 
-export const slashPath = (name: string) => name.replace(/\\/g, "/");
 
 export const resolveImportFile = (pathFile: string[], root: string) => {
   let importFile = path.relative(root, path.join(...pathFile));
-  importFile = slashPath(importFile);
   if (!importFile.startsWith(".")) {
     importFile = `./${importFile}`;
   }
@@ -26,7 +24,7 @@ export const globSlash = (
   options: GlobOptionsWithFileTypesUnset
 ) => {
   const files = globSync(pattern, options);
-  return files.map((path) => slashPath(path));
+  return files.map((path) =>  slash(path));
 };
 
 export const getEntries = (root: string) => {

@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { appendELAttr, printElement, printImports, type RRElement } from "./el";
 import type { RAConfig } from "./types";
-import { type ConfigEntry, parseRoutePath, resolveImportFile } from "./scan";
+import { type ConfigEntry, parseRoutePath, resolveImportFile } from "./scanDirectory";
 
 export const writeAdminWrapper = (
   file: string,

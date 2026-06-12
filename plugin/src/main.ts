@@ -1,6 +1,6 @@
 import path from "path";
 import { type PluginOption } from "vite";
-import { getConfigEntries } from "./scan";
+import { getConfigEntries } from "./scanDirectory2";
 import { writeAdminWrapper } from "./writeAdminWrapper";
 import { writeMenuWrapper } from "./writeMenuWrapper";
 import { ensureRAConfig, type RAOpts } from "./types";
